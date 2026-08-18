@@ -25,20 +25,35 @@ Then the cruelty escalates in stages:
    "Connection lost. Playa dust detected in the blockchain. Transfer suspended
    pending a security review. (The security risk is you.)" — and the victim is
    marched through three security checkpoints:
-2. **Hold to verify you're a human.** Hold a button for six seconds. It fails
-   at 93% ("Grip signature: 'desperate.'"), fails again at 97%, and passes on
-   the third attempt: "Verified: human. Barely." Letting go early also counts —
-   "You let go. A robot would never. Start over."
-3. **The confession.** Four checkboxes they must tick themselves: "I am on my
-   phone, at Burning Man, on purpose" … "I have chosen this instead." The
-   confirm button stays disabled until they've confessed to all of it.
-4. **The begging.** "Transfers of this size must be requested politely." They
-   must type *please* to proceed. Wrong answers get coached ("P-L-E-A-S-E. Six
-   letters. You can do this."); "pls" is rejected for laziness.
-5. **The boost button.** The transfer resumes ("Attempt 2 of 1") and offers
+2. **Hold to verify you're a human (Checkpoint 1 of 3).** Hold a button for six
+   seconds. It fails at 93% ("Grip signature: 'desperate.'"), fails again at
+   97%, and passes on the third attempt: "Verified: human. Barely." Letting go
+   early also counts — "You let go. A robot would never. Start over."
+3. **The fun-recognition CAPTCHA (Checkpoint 2 of 3).** A 3×3 emoji grid:
+   "Select all squares containing someone having more fun than you." The only
+   passing answer is all nine. ("Incorrect. They are ALL having more fun than
+   you. All of them." → "ALL. OF. THEM.")
+4. **The confession (Checkpoint 3 of 3).** Four checkboxes they must tick
+   themselves: "I am on my phone, at Burning Man, on purpose" … "I have chosen
+   this instead." The confirm button stays disabled until they've confessed.
+5. **The excuse (Checkpoint 4 of 3).** "For the record: why are you on your
+   phone right now?" Every radio option earns a retort — "I thought it might
+   be important" → *"It wasn't."* The chosen excuse goes on their permanent
+   record in the reveal stats.
+6. **The begging (Checkpoint 5 of 3 · We Lied).** "Transfers of this size must
+   be requested politely." They must type *please* to proceed. Wrong answers
+   get coached ("P-L-E-A-S-E. Six letters. You can do this."); "pls" is
+   rejected for laziness.
+7. **The oath (Final Checkpoint · Probably).** Say out loud: *"I'm sorry,
+   sunset. I chose a URL over you."* A fake LISTENING… indicator pulses, then:
+   "We didn't hear you." → "Say it with your chest." → "Confession: we're a
+   static website. We can't hear anything. But you just apologized to the sky,
+   out loud, multiple times — and honestly? That's the most Burning Man thing
+   you've done all day."
+8. **The boost button.** The transfer resumes ("Attempt 2 of 1") and offers
    "⚡ TAP TO BOOST TRANSFER SPEED." Each tap *lowers* the bar by 2% and earns
    escalating mockery ("Tapping harder does not help. It never has.").
-6. **The false summit.** Round two ends with the bar snapping to 100% —
+9. **The false summit.** Round two ends with the bar snapping to 100% —
    "Transfer complete! Redirecting you to your prize…" — two full seconds of
    hope, and then—
 
