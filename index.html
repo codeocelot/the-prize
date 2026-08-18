@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#141009">
+<title>Claim Your Prize</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg: #141009;
+    --bg-warm: #1e1509;
+    --ink: #f3e9d8;
+    --ink-dim: #b9a88c;
+    --amber: #ffb347;
+    --ember: #ff6b2b;
+    --ember-deep: #c93c0e;
+  }
+
+  html, body { height: 100%; }
+
+  body {
+    background: radial-gradient(120% 90% at 50% 110%, var(--bg-warm) 0%, var(--bg) 60%);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.5;
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    min-height: 100dvh;
+  }
+
+  /* drifting dust */
+  .dust {
+    position: fixed; inset: 0; pointer-events: none; opacity: .5;
+    background-image:
+      radial-gradient(1px 1px at 12% 30%, #f3e9d866, transparent),
+      radial-gradient(1px 1px at 68% 14%, #f3e9d84d, transparent),
+      radial-gradient(2px 2px at 42% 62%, #ffb34733, transparent),
+      radial-gradient(1px 1px at 85% 48%, #f3e9d84d, transparent),
+      radial-gradient(1px 1px at 25% 82%, #f3e9d840, transparent),
+      radial-gradient(2px 2px at 92% 78%, #ffb34726, transparent);
+    animation: drift 60s linear infinite;
+  }
+  @keyframes drift {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-100vw); }
+  }
+  .dust::after {
+    content: ""; position: absolute; inset: 0 -100vw 0 100vw;
+    background: inherit;
+  }
+
+  main { width: 100%; max-width: 26rem; position: relative; }
+
+  section { display: none; text-align: center; animation: fadein .6s ease; }
+  section.on { display: block; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  .badge {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--amber);
+    border: 1px solid #ffb34755;
+    border-radius: 999px;
+    padding: .35em 1em;
+    margin-bottom: 1.4rem;
+  }
+
+  h1 {
+    font-size: clamp(1.9rem, 8.5vw, 2.6rem);
+    line-height: 1.15;
+    letter-spacing: -.01em;
+    margin-bottom: .8rem;
+  }
+
+  .prize {
+    font-size: clamp(2.4rem, 11vw, 3.4rem);
+    font-weight: 800;
+    background: linear-gradient(100deg, var(--amber), var(--ember));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin: .6rem 0 .2rem;
+  }
+
+  p { color: var(--ink-dim); margin-bottom: 1rem; }
+  p strong { color: var(--ink); }
+
+  .btn {
+    display: inline-block;
+    width: 100%;
+    border: 0;
+    border-radius: 16px;
+    padding: 1.05em 1.5em;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+    color: #1a0d02;
+    background: linear-gradient(100deg, var(--amber), var(--ember));
+    box-shadow: 0 0 32px #ff6b2b40, 0 4px 16px #0008;
+    cursor: pointer;
+    margin-top: 1.2rem;
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+  .btn:active { transform: scale(.97); }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 32px #ff6b2b40, 0 4px 16px #0008; }
+    50%      { box-shadow: 0 0 52px #ff6b2b73, 0 4px 16px #0008; }
+  }
+
+  .fine {
+    font-size: .68rem;
+    color: #7d7060;
+    margin-top: 1.6rem;
+    line-height: 1.6;
+  }
+
+  /* ---- loading ---- */
+  .barwrap {
+    background: #ffffff14;
+    border-radius: 999px;
+    height: 14px;
+    overflow: hidden;
+    margin: 2rem 0 .7rem;
+  }
+  .bar {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--amber), var(--ember));
+    transition: width .45s ease;
+  }
+  .pct {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    color: var(--amber);
+    font-size: .95rem;
+  }
+  .status {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: .92rem;
+    color: var(--ink);
+    min-height: 3.2em;
+    margin-top: 1.4rem;
+    transition: opacity .3s;
+  }
+  .timer {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: .75rem;
+    color: #7d7060;
+    margin-top: 2.2rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .timer b { color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+  .skip {
+    display: none;
+    margin-top: 1.4rem;
+    font-size: .8rem;
+    color: #7d7060;
+    text-decoration: underline;
+    background: none; border: 0; cursor: pointer;
+  }
+  .skip.on { display: inline-block; animation: fadein .6s ease; }
+
+  /* ---- reveal ---- */
+  .stats {
+    text-align: left;
+    background: #ffffff0a;
+    border: 1px solid #ffffff14;
+    border-radius: 16px;
+    padding: 1.1rem 1.2rem;
+    margin: 1.6rem 0;
+    font-size: .92rem;
+  }
+  .stats div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .45em 0;
+    color: var(--ink-dim);
+  }
+  .stats div + div { border-top: 1px solid #ffffff0d; }
+  .stats b { color: var(--ink); font-variant-numeric: tabular-nums; text-align: right; }
+
+  .prizebox {
+    border: 1px dashed #ffb34766;
+    border-radius: 16px;
+    padding: 1.2rem 1.3rem;
+    margin: 1.6rem 0;
+  }
+  .prizebox h2 {
+    font-size: .72rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: .5rem;
+  }
+  .prizebox p { margin: 0; color: var(--ink); font-weight: 600; }
+
+  .toast {
+    min-height: 1.6em;
+    font-weight: 700;
+    color: var(--amber);
+    margin-top: .8rem;
+    font-size: .95rem;
+  }
+
+  footer {
+    margin-top: 2.4rem;
+    font-size: .72rem;
+    color: #7d7060;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="dust"></div>
+<main>
+
+  <!-- ACT I: THE HOOK -->
+  <section id="hook" class="on">
+    <span class="badge" id="hook-badge">Playa Prize Drop · 7 of 10</span>
+    <h1 id="hook-title">🎉 You found it.</h1>
+    <p id="hook-body">This tag is one of ten hidden across the playa.<br>Your prize:</p>
+    <div class="prize" id="hook-prize">0.1 BTC</div>
+    <p id="hook-sub">Yes. Really. Tap below to claim it.</p>
+    <button class="btn" id="claim">CLAIM MY PRIZE</button>
+    <p class="fine">No purchase necessary. Prize non-transferable, non-refundable, non-existent-adjacent. By tapping you agree that your attention has already been collected as payment. Terms apply. Boy, do they apply.</p>
+  </section>
+
+  <!-- ACT II: THE ENDLESS LOAD -->
+  <section id="load">
+    <span class="badge">Processing Claim</span>
+    <h1>Transferring funds…</h1>
+    <div class="barwrap"><div class="bar" id="bar"></div></div>
+    <div class="pct" id="pct">0%</div>
+    <div class="status" id="status">Connecting to prize server…</div>
+    <button class="skip" id="skip">just tell me what's going on</button>
+    <div class="timer">Time spent staring at this screen<br><b id="clock1">0:00</b></div>
+  </section>
+
+  <!-- ACT III: THE REVEAL -->
+  <section id="reveal">
+    <span class="badge">Claim Complete</span>
+    <h1>There is no bitcoin.</h1>
+    <p>There's no prize. There never was. Someone hid this tag specifically to catch people who'd rather scan a mystery QR code than look at <strong>literally anything else at Burning Man.</strong></p>
+    <p>Congratulations. It worked.</p>
+
+    <div class="stats">
+      <div><span>Prizes won</span><b>0</b></div>
+      <div><span>Time spent staring at this screen</span><b id="clock2">0:00</b></div>
+      <div><span>Art you walked past to get here</span><b>all of it</b></div>
+      <div><span>Sunsets currently happening</span><b>1 (behind you)</b></div>
+      <div><span>People nearby not looking at a phone</span><b>~69,999</b></div>
+    </div>
+
+    <div class="prizebox">
+      <h2>Your actual prize</h2>
+      <p>Permission to put this thing in airplane mode, shove it to the bottom of your bag, and go be a person. It's yours. You've earned it. Sort of.</p>
+    </div>
+
+    <button class="btn" id="again">TRY AGAIN</button>
+    <div class="toast" id="toast"></div>
+
+    <footer>This message was placed here by someone who loves you.<br>That's why they're bullying you.<br>Now go. The dust misses you.</footer>
+  </section>
+
+</main>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ---- repeat-offender detection ----
+  var store = {
+    get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+  var visits = (parseInt(store.get('playa_visits'), 10) || 0) + 1;
+  store.set('playa_visits', String(visits));
+  var seenReveal = store.get('playa_seen') === '1';
+
+  if (seenReveal && visits > 1) {
+    $('hook-badge').textContent = 'Scan #' + visits + ' · Seriously?';
+    $('hook-title').textContent = 'You scanned another one.';
+    $('hook-body').innerHTML = 'You know exactly how this ends.<br>The prize is still:';
+    $('hook-prize').textContent = 'fake';
+    $('hook-sub').textContent = 'And yet here you are. Phone out. Again.';
+    $('claim').textContent = 'SHOW ME THE LOADING BAR ANYWAY';
+  }
+
+  // ---- timer ----
+  var t0 = null;
+  function fmt(ms) {
+    var s = Math.floor(ms / 1000);
+    return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
+  }
+  setInterval(function () {
+    if (t0 === null) return;
+    var t = fmt(Date.now() - t0);
+    $('clock1').textContent = t;
+    $('clock2').textContent = t;
+  }, 500);
+
+  function show(id) {
+    var secs = document.querySelectorAll('section');
+    for (var i = 0; i < secs.length; i++) secs[i].classList.remove('on');
+    $(id).classList.add('on');
+    window.scrollTo(0, 0);
+  }
+
+  // ---- act II: the slow burn ----
+  // [message, seconds to display]
+  var script = [
+    ['Connecting to prize server…', 2.8],
+    ['Verifying blockchain transaction…', 3.0],
+    ['Confirming GPS coordinates: Black Rock Desert, NV…', 3.2],
+    ['Wait.', 1.8],
+    ['Black Rock Desert?', 2.4],
+    ['You\'re at Burning Man.', 2.6],
+    ['You are AT Burning Man.', 2.6],
+    ['Surrounded by fire, art cars, and 70,000 of the most interesting weirdos on Earth…', 4.4],
+    ['…and you\'re watching a progress bar.', 3.4],
+    ['The progress bar is embarrassed for you.', 3.2],
+    ['Buffering… your priorities…', 3.0],
+    ['Fun fact: there is no prize.', 3.0],
+    ['There was never a prize.', 2.8],
+    ['The real prize was the sunset you turned your back on to read this.', 4.2],
+    ['Still here? Wow. Okay.', 2.8]
+  ];
+
+  var msgIdx = 0, progress = 0, loadTimers = [];
+
+  function runStatus() {
+    if (msgIdx >= script.length) { reveal(); return; }
+    var el = $('status');
+    el.style.opacity = 0;
+    loadTimers.push(setTimeout(function () {
+      el.textContent = script[msgIdx][0];
+      el.style.opacity = 1;
+      loadTimers.push(setTimeout(function () { msgIdx++; runStatus(); }, script[msgIdx][1] * 1000));
+    }, 300));
+  }
+
+  function tickBar() {
+    // creep toward 99, then panic and fall back — forever
+    if (progress >= 98.5) progress = 84 + Math.random() * 6;
+    else progress += (99 - progress) * (0.04 + Math.random() * 0.05);
+    $('bar').style.width = progress + '%';
+    $('pct').textContent = Math.floor(progress) + '%';
+  }
+
+  $('claim').addEventListener('click', function () {
+    t0 = Date.now();
+    show('load');
+    document.title = 'Transferring funds…';
+    runStatus();
+    loadTimers.push(setInterval(tickBar, 450));
+    loadTimers.push(setTimeout(function () { $('skip').classList.add('on'); }, 18000));
+  });
+
+  $('skip').addEventListener('click', reveal);
+
+  // ---- act III ----
+  function reveal() {
+    for (var i = 0; i < loadTimers.length; i++) { clearTimeout(loadTimers[i]); clearInterval(loadTimers[i]); }
+    store.set('playa_seen', '1');
+    document.title = 'no.';
+    show('reveal');
+  }
+
+  var retorts = [
+    'No.',
+    'Still no.',
+    'The button works fine. The button is not the problem.',
+    'You\'re at BURNING MAN.',
+    'Every tap makes the sunset slightly less impressed with you.',
+    'Put. It. Away.',
+    'Okay, this is just sad now. Go find your camp.'
+  ];
+  var retortIdx = 0;
+  $('again').addEventListener('click', function () {
+    $('toast').textContent = retorts[Math.min(retortIdx, retorts.length - 1)];
+    retortIdx++;
+    if (retortIdx >= retorts.length) $('again').textContent = 'THE BUTTON HAS GIVEN UP ON YOU';
+  });
+})();
+</script>
+</body>
+</html>
