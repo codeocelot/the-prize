@@ -165,6 +165,63 @@
     animation: fadein .6s ease;
   }
   .btn2:active { transform: scale(.96); background: #ffb3471a; }
+  .btn:disabled { opacity: .35; animation: none; box-shadow: none; cursor: not-allowed; }
+
+  /* hold-to-verify */
+  .hold {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    border: 1px solid #ffb34766;
+    border-radius: 16px;
+    background: #ffb3470d;
+    color: var(--amber);
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: .06em;
+    padding: 1.3em 1.5em;
+    margin-top: 1.6rem;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: none;
+  }
+  .hold .holdfill {
+    position: absolute; inset: 0; width: 0%;
+    background: linear-gradient(100deg, var(--amber), var(--ember));
+    opacity: .35;
+  }
+  .hold .holdlabel { position: relative; }
+
+  /* confession checkboxes */
+  .checks { text-align: left; margin: 1.4rem 0 .2rem; }
+  .checks label {
+    display: flex; gap: .7rem; align-items: flex-start;
+    padding: .55em 0;
+    color: var(--ink-dim);
+    font-size: .95rem;
+    cursor: pointer;
+  }
+  .checks label + label { border-top: 1px solid #ffffff0d; }
+  .checks input { accent-color: var(--ember); width: 1.15em; height: 1.15em; margin-top: .15em; flex: none; }
+
+  /* begging input */
+  .begin {
+    width: 100%;
+    margin-top: 1.4rem;
+    padding: .95em 1em;
+    border-radius: 12px;
+    border: 1px solid #ffffff2b;
+    background: #ffffff0a;
+    color: var(--ink);
+    font-size: 1rem;
+    text-align: center;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    outline: none;
+  }
+  .begin:focus { border-color: #ffb34766; }
+
   .status {
     font-family: ui-monospace, "SF Mono", Menlo, monospace;
     font-size: .92rem;
@@ -267,8 +324,48 @@
     <div class="eta" id="eta">estimating time remaining…</div>
     <div class="status" id="status">Connecting to prize server…</div>
     <button class="btn2" id="boost" hidden>⚡ TAP TO BOOST TRANSFER SPEED</button>
-    <button class="skip" id="skip">just tell me what's going on</button>
-    <div class="timer">Time spent staring at this screen<br><b id="clock1">0:00</b></div>
+    <button class="skip skipx" id="skip">just tell me what's going on</button>
+    <div class="timer">Time spent staring at this screen<br><b id="clock1" class="clock">0:00</b></div>
+  </section>
+
+  <!-- CHECKPOINT 1: HOLD TO VERIFY -->
+  <section id="verify">
+    <span class="badge">Security Checkpoint 1 of 3</span>
+    <h1>Verify you're a human.</h1>
+    <p>The transfer can't resume until we're sure you're a real person. Hold the button until verification completes. Robots can't hold buttons. That's just science.</p>
+    <button class="hold" id="holdbtn"><span class="holdfill" id="holdfill"></span><span class="holdlabel">HOLD TO VERIFY</span></button>
+    <div class="status" id="holdmsg"></div>
+    <button class="skip on skipx">or admit you might be a robot</button>
+    <div class="timer">Time spent staring at this screen<br><b class="clock">0:00</b></div>
+  </section>
+
+  <!-- CHECKPOINT 2: THE CONFESSION -->
+  <section id="confess">
+    <span class="badge">Security Checkpoint 2 of 3</span>
+    <h1>Confirm a few things.</h1>
+    <p>For compliance reasons, we need you to acknowledge the following. In writing. All of it.</p>
+    <div class="checks" id="checks">
+      <label><input type="checkbox"> I am currently at Burning Man</label>
+      <label><input type="checkbox"> I am on my phone, at Burning Man, on purpose</label>
+      <label><input type="checkbox"> Something amazing is probably happening within 100 feet of me</label>
+      <label><input type="checkbox"> I have chosen this instead</label>
+    </div>
+    <button class="btn" id="confessbtn" disabled>I CONFIRM ALL OF THE ABOVE</button>
+    <div class="toast" id="confessmsg"></div>
+    <button class="skip on skipx">I confess nothing</button>
+    <div class="timer">Time spent staring at this screen<br><b class="clock">0:00</b></div>
+  </section>
+
+  <!-- CHECKPOINT 3: THE BEGGING -->
+  <section id="beg">
+    <span class="badge">Security Checkpoint 3 of 3</span>
+    <h1>Say the magic word.</h1>
+    <p>Transfers of this size must be requested politely. Type the magic word to release your funds.</p>
+    <input class="begin" id="beginput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="the magic word">
+    <button class="btn" id="begbtn">SUBMIT REQUEST</button>
+    <div class="status" id="begmsg"></div>
+    <button class="skip on skipx">I will not beg</button>
+    <div class="timer">Time spent staring at this screen<br><b class="clock">0:00</b></div>
   </section>
 
   <!-- ACT III: THE REVEAL -->
@@ -280,8 +377,11 @@
 
     <div class="stats">
       <div><span>Prizes won</span><b>0</b></div>
-      <div><span>Time spent staring at this screen</span><b id="clock2">0:00</b></div>
+      <div><span>Time spent staring at this screen</span><b id="clock2" class="clock">0:00</b></div>
       <div><span>Transfer restarts survived</span><b>1</b></div>
+      <div><span>Humanity checks failed</span><b id="holdstat">0</b></div>
+      <div><span>Self-incriminating boxes checked</span><b id="confessstat">0 of 4</b></div>
+      <div><span>Times you typed "please" to a website</span><b id="begstat">0</b></div>
       <div><span>Speed boosts attempted</span><b id="booststat">0</b></div>
       <div><span>Art you walked past to get here</span><b>all of it</b></div>
       <div><span>Sunsets currently happening</span><b>1 (behind you)</b></div>
@@ -329,11 +429,11 @@
     var s = Math.floor(ms / 1000);
     return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
   }
+  var clocks = document.querySelectorAll('.clock');
   setInterval(function () {
     if (t0 === null) return;
     var t = fmt(Date.now() - t0);
-    $('clock1').textContent = t;
-    $('clock2').textContent = t;
+    for (var i = 0; i < clocks.length; i++) clocks[i].textContent = t;
   }, 500);
 
   function show(id) {
@@ -363,10 +463,13 @@
   var crash = [
     ['Connection lost.', 2.2],
     ['Playa dust detected in the blockchain.', 3.0],
-    ['Restarting transfer. Attempt 2 of 1…', 3.4]
+    ['Transfer suspended pending a security review.', 3.0],
+    ['(The security risk is you.)', 2.8]
   ];
 
   var wave2 = [
+    ['Identity verified. Compliance logged. Politeness: received.', 3.2],
+    ['Restarting transfer. Attempt 2 of 1…', 2.8],
     ['Re-establishing connection…', 3.0],
     ['Re-verifying wallet…', 3.0],
     ['This is your life now.', 3.0],
@@ -447,22 +550,143 @@
     $('status').textContent = boosts[Math.min(boostTaps - 1, boosts.length - 1)];
   });
 
+  function stopLoad() {
+    for (var i = 0; i < loadTimers.length; i++) { clearTimeout(loadTimers[i]); clearInterval(loadTimers[i]); }
+    loadTimers = [];
+  }
+
   function crashOut() {
     progress = 2;
     paintBar();
     $('eta').textContent = 'recalculating…';
-    etaIdx = 2; // resume the lies from "4 minutes"
-    $('loadtitle').textContent = 'Transferring funds… again.';
+    $('loadtitle').textContent = 'Transfer interrupted.';
     playWave(crash, function () {
-      $('boost').hidden = false;
-      playWave(wave2, falseSummit);
+      stopLoad();
+      document.title = 'Verify you’re human';
+      show('verify');
     });
+  }
+
+  // ---- checkpoint 1: hold to verify ----
+  var HOLD_MS = 6000;
+  var holdFailAt = [93, 97, Infinity]; // third attempt is allowed to succeed
+  var holdAttempt = 0, holdFails = 0, holdTimer = null, holdT0 = 0, holdDone = false;
+
+  function endHold() {
+    clearInterval(holdTimer);
+    holdTimer = null;
+    $('holdfill').style.width = '0%';
+  }
+
+  $('holdbtn').addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  $('holdbtn').addEventListener('pointerdown', function (e) {
+    if (holdDone || holdTimer !== null) return;
+    e.preventDefault();
+    if (this.setPointerCapture) this.setPointerCapture(e.pointerId);
+    holdT0 = Date.now();
+    $('holdmsg').textContent = 'Verifying humanity…';
+    holdTimer = setInterval(function () {
+      var pct = (Date.now() - holdT0) / HOLD_MS * 100;
+      $('holdfill').style.width = Math.min(pct, 100) + '%';
+      if (pct >= holdFailAt[Math.min(holdAttempt, 2)]) {
+        endHold();
+        holdFails++;
+        $('holdmsg').textContent = holdAttempt === 0
+          ? 'Verification failed at 93%. Grip signature: “desperate.” Try again.'
+          : 'Failed at 97%. So close. So, so close. Again.';
+        holdAttempt++;
+      } else if (pct >= 100) {
+        endHold();
+        holdDone = true;
+        $('holdmsg').textContent = 'Verified: human. Barely. Proceeding…';
+        setTimeout(function () {
+          document.title = 'Compliance check';
+          show('confess');
+        }, 1600);
+      }
+    }, 60);
+  });
+  function holdRelease() {
+    if (holdDone || holdTimer === null) return;
+    var pct = (Date.now() - holdT0) / HOLD_MS * 100;
+    endHold();
+    holdFails++;
+    $('holdmsg').textContent = pct < 8
+      ? 'That was a tap. HOLD. Like you hold your phone. Constantly.'
+      : 'You let go. A robot would never. Start over.';
+  }
+  $('holdbtn').addEventListener('pointerup', holdRelease);
+  $('holdbtn').addEventListener('pointercancel', holdRelease);
+
+  // ---- checkpoint 2: the confession ----
+  var checkEls = document.querySelectorAll('#checks input');
+  function checkedCount() {
+    var n = 0;
+    for (var i = 0; i < checkEls.length; i++) if (checkEls[i].checked) n++;
+    return n;
+  }
+  for (var c = 0; c < checkEls.length; c++) {
+    checkEls[c].addEventListener('change', function () {
+      $('confessbtn').disabled = checkedCount() < checkEls.length;
+    });
+  }
+  $('confessbtn').addEventListener('click', function () {
+    this.disabled = true;
+    $('confessmsg').textContent = 'Noted. Forever.';
+    setTimeout(function () {
+      document.title = 'One more thing…';
+      show('beg');
+    }, 1600);
+  });
+
+  // ---- checkpoint 3: the begging ----
+  var begWrong = [
+    'Incorrect. The magic word is “please.” Yes, we’re making you type it.',
+    'P-L-E-A-S-E. Six letters. You can do this.',
+    'You’re overthinking a word you learned at age two.',
+    'The word. Is. Please.'
+  ];
+  var begWrongIdx = 0, begged = false;
+  function submitBeg() {
+    if (begged) return;
+    var v = $('beginput').value.trim().toLowerCase().replace(/[.!]+$/, '');
+    if (v === 'please') {
+      begged = true;
+      $('begmsg').textContent = 'Begging received. Dignity: processed. Resuming transfer…';
+      setTimeout(resumeTransfer, 2000);
+    } else if (v === '') {
+      $('begmsg').textContent = 'You have to actually type it.';
+    } else if (v === 'pls' || v === 'plz') {
+      $('begmsg').textContent = 'Spell it out. You have the time. Clearly.';
+    } else if (v === 'no') {
+      $('begmsg').textContent = 'That’s not begging. Try again.';
+    } else {
+      $('begmsg').textContent = begWrong[Math.min(begWrongIdx++, begWrong.length - 1)];
+    }
+  }
+  $('begbtn').addEventListener('click', submitBeg);
+  $('beginput').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') submitBeg();
+  });
+
+  // ---- back to the bar ----
+  function resumeTransfer() {
+    show('load');
+    document.title = 'Transferring funds…';
+    $('loadtitle').textContent = 'Transferring funds… again.';
+    progress = 7;
+    paintBar();
+    etaIdx = 2; // resume the lies from "4 minutes"
+    tickEta();
+    loadTimers.push(setInterval(tickBar, 450));
+    loadTimers.push(setInterval(tickEta, 8000));
+    $('boost').hidden = false;
+    playWave(wave2, falseSummit);
   }
 
   // two seconds of pure hope
   function falseSummit() {
-    for (var i = 0; i < loadTimers.length; i++) { clearTimeout(loadTimers[i]); clearInterval(loadTimers[i]); }
-    loadTimers = [];
+    stopLoad();
     progress = 100;
     paintBar();
     $('eta').textContent = 'done!';
@@ -482,12 +706,17 @@
     playWave(wave1, crashOut);
   });
 
-  $('skip').addEventListener('click', reveal);
+  var skips = document.querySelectorAll('.skipx');
+  for (var s = 0; s < skips.length; s++) skips[s].addEventListener('click', reveal);
 
   // ---- act III ----
   function reveal() {
-    for (var i = 0; i < loadTimers.length; i++) { clearTimeout(loadTimers[i]); clearInterval(loadTimers[i]); }
+    stopLoad();
+    endHold();
     store.set('playa_seen', '1');
+    $('holdstat').textContent = String(holdFails);
+    $('confessstat').textContent = checkedCount() + ' of 4';
+    $('begstat').textContent = begged ? '1' : '0';
     $('booststat').textContent = boostTaps === 0 ? '0 (smart)' : String(boostTaps);
     document.title = 'no.';
     show('reveal');

@@ -22,18 +22,31 @@ gets worse ("about 10 seconds remaining" → "about 2 hours remaining" →
 Then the cruelty escalates in stages:
 
 1. **The crash.** Just when the first message wave ends, the transfer dies:
-   "Connection lost. Playa dust detected in the blockchain. Restarting
-   transfer. Attempt 2 of 1…" — and the bar resets to 0%.
-2. **The boost button.** Round two offers "⚡ TAP TO BOOST TRANSFER SPEED."
-   Each tap *lowers* the bar by 2% and earns escalating mockery ("Tapping
-   harder does not help. It never has."). Taps are counted and reported back
-   in the reveal stats.
-3. **The false summit.** Round two ends with the bar snapping to 100% —
+   "Connection lost. Playa dust detected in the blockchain. Transfer suspended
+   pending a security review. (The security risk is you.)" — and the victim is
+   marched through three security checkpoints:
+2. **Hold to verify you're a human.** Hold a button for six seconds. It fails
+   at 93% ("Grip signature: 'desperate.'"), fails again at 97%, and passes on
+   the third attempt: "Verified: human. Barely." Letting go early also counts —
+   "You let go. A robot would never. Start over."
+3. **The confession.** Four checkboxes they must tick themselves: "I am on my
+   phone, at Burning Man, on purpose" … "I have chosen this instead." The
+   confirm button stays disabled until they've confessed to all of it.
+4. **The begging.** "Transfers of this size must be requested politely." They
+   must type *please* to proceed. Wrong answers get coached ("P-L-E-A-S-E. Six
+   letters. You can do this."); "pls" is rejected for laziness.
+5. **The boost button.** The transfer resumes ("Attempt 2 of 1") and offers
+   "⚡ TAP TO BOOST TRANSFER SPEED." Each tap *lowers* the bar by 2% and earns
+   escalating mockery ("Tapping harder does not help. It never has.").
+6. **The false summit.** Round two ends with the bar snapping to 100% —
    "Transfer complete! Redirecting you to your prize…" — two full seconds of
    hope, and then—
 
-The whole ordeal runs ~90 seconds; a "just tell me what's going on" escape
-hatch appears after 18 seconds for the impatient. Either way it lands on—
+Every humiliation is tallied and read back in the reveal stats ("Humanity
+checks failed: 3 · Self-incriminating boxes checked: 4 of 4 · Times you typed
+'please' to a website: 1"). The full ordeal runs 2–3 minutes; every screen has
+an escape hatch ("or admit you might be a robot", "I confess nothing", "I will
+not beg") that jumps straight to—
 
 **Act III — The Reveal.** "There is no bitcoin." A stats card (Prizes won: 0.
 People nearby not looking at a phone: ~69,999.) and their *actual* prize:
