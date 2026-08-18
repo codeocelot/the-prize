@@ -143,6 +143,28 @@
     color: var(--amber);
     font-size: .95rem;
   }
+  .eta {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: .72rem;
+    color: #7d7060;
+    margin-top: .3rem;
+    min-height: 1.2em;
+  }
+  .btn2 {
+    display: inline-block;
+    border: 1px solid #ffb34766;
+    border-radius: 12px;
+    background: none;
+    color: var(--amber);
+    font-weight: 700;
+    font-size: .85rem;
+    letter-spacing: .04em;
+    padding: .8em 1.3em;
+    margin-top: 1.4rem;
+    cursor: pointer;
+    animation: fadein .6s ease;
+  }
+  .btn2:active { transform: scale(.96); background: #ffb3471a; }
   .status {
     font-family: ui-monospace, "SF Mono", Menlo, monospace;
     font-size: .92rem;
@@ -239,10 +261,12 @@
   <!-- ACT II: THE ENDLESS LOAD -->
   <section id="load">
     <span class="badge">Processing Claim</span>
-    <h1>Transferring funds…</h1>
+    <h1 id="loadtitle">Transferring funds…</h1>
     <div class="barwrap"><div class="bar" id="bar"></div></div>
     <div class="pct" id="pct">0%</div>
+    <div class="eta" id="eta">estimating time remaining…</div>
     <div class="status" id="status">Connecting to prize server…</div>
+    <button class="btn2" id="boost" hidden>⚡ TAP TO BOOST TRANSFER SPEED</button>
     <button class="skip" id="skip">just tell me what's going on</button>
     <div class="timer">Time spent staring at this screen<br><b id="clock1">0:00</b></div>
   </section>
@@ -257,6 +281,8 @@
     <div class="stats">
       <div><span>Prizes won</span><b>0</b></div>
       <div><span>Time spent staring at this screen</span><b id="clock2">0:00</b></div>
+      <div><span>Transfer restarts survived</span><b>1</b></div>
+      <div><span>Speed boosts attempted</span><b id="booststat">0</b></div>
       <div><span>Art you walked past to get here</span><b>all of it</b></div>
       <div><span>Sunsets currently happening</span><b>1 (behind you)</b></div>
       <div><span>People nearby not looking at a phone</span><b>~69,999</b></div>
@@ -319,7 +345,7 @@
 
   // ---- act II: the slow burn ----
   // [message, seconds to display]
-  var script = [
+  var wave1 = [
     ['Connecting to prize server…', 2.8],
     ['Verifying blockchain transaction…', 3.0],
     ['Confirming GPS coordinates: Black Rock Desert, NV…', 3.2],
@@ -331,40 +357,129 @@
     ['…and you\'re watching a progress bar.', 3.4],
     ['The progress bar is embarrassed for you.', 3.2],
     ['Buffering… your priorities…', 3.0],
+    ['Almost there. Probably. Hang tight.', 3.0]
+  ];
+
+  var crash = [
+    ['Connection lost.', 2.2],
+    ['Playa dust detected in the blockchain.', 3.0],
+    ['Restarting transfer. Attempt 2 of 1…', 3.4]
+  ];
+
+  var wave2 = [
+    ['Re-establishing connection…', 3.0],
+    ['Re-verifying wallet…', 3.0],
+    ['This is your life now.', 3.0],
+    ['Somewhere out there, an art car shaped like a duck is shooting flames into the sky.', 4.4],
+    ['You are not on it.', 2.6],
+    ['You are here. With me. A progress bar.', 3.4],
+    ['I don\'t even want to be here.', 3.0],
     ['Fun fact: there is no prize.', 3.0],
     ['There was never a prize.', 2.8],
     ['The real prize was the sunset you turned your back on to read this.', 4.2],
-    ['Still here? Wow. Okay.', 2.8]
+    ['You could have left at any time.', 3.0],
+    ['You still can.', 2.4],
+    ['…', 2.2],
+    ['No? Okay. Finishing up. For real this time. Promise.', 3.4]
   ];
 
-  var msgIdx = 0, progress = 0, loadTimers = [];
+  var progress = 0, loadTimers = [];
 
-  function runStatus() {
-    if (msgIdx >= script.length) { reveal(); return; }
+  function playWave(wave, done) {
+    var i = 0;
     var el = $('status');
-    el.style.opacity = 0;
-    loadTimers.push(setTimeout(function () {
-      el.textContent = script[msgIdx][0];
-      el.style.opacity = 1;
-      loadTimers.push(setTimeout(function () { msgIdx++; runStatus(); }, script[msgIdx][1] * 1000));
-    }, 300));
+    function next() {
+      if (i >= wave.length) { done(); return; }
+      el.style.opacity = 0;
+      loadTimers.push(setTimeout(function () {
+        el.textContent = wave[i][0];
+        el.style.opacity = 1;
+        loadTimers.push(setTimeout(function () { i++; next(); }, wave[i][1] * 1000));
+      }, 300));
+    }
+    next();
+  }
+
+  function paintBar() {
+    $('bar').style.width = progress + '%';
+    $('pct').textContent = Math.floor(progress) + '%';
   }
 
   function tickBar() {
     // creep toward 99, then panic and fall back — forever
     if (progress >= 98.5) progress = 84 + Math.random() * 6;
     else progress += (99 - progress) * (0.04 + Math.random() * 0.05);
-    $('bar').style.width = progress + '%';
-    $('pct').textContent = Math.floor(progress) + '%';
+    paintBar();
+  }
+
+  // an ETA that only ever gets worse
+  var etas = [
+    'about 10 seconds remaining',
+    'about 45 seconds remaining',
+    'about 4 minutes remaining',
+    'about 2 hours remaining',
+    'recalculating…',
+    'somewhere between now and dawn',
+    '1 sunset remaining',
+    'don\'t worry about it',
+    'stop checking'
+  ];
+  var etaIdx = 0;
+  function tickEta() {
+    $('eta').textContent = etas[Math.min(etaIdx++, etas.length - 1)];
+  }
+
+  // the boost button: makes things worse, keeps receipts
+  var boosts = [
+    'Boost applied! Just kidding. That did nothing.',
+    'Tapping harder does not help. It never has.',
+    'That one made it slower, actually.',
+    '−2%. Great work.',
+    'The bar and I discussed it. No.',
+    'Every tap adds a grain of dust to your soul.',
+    'Okay, now you\'re just fidgeting.'
+  ];
+  var boostTaps = 0;
+  $('boost').addEventListener('click', function () {
+    boostTaps++;
+    progress = Math.max(3, progress - 2);
+    paintBar();
+    $('status').textContent = boosts[Math.min(boostTaps - 1, boosts.length - 1)];
+  });
+
+  function crashOut() {
+    progress = 2;
+    paintBar();
+    $('eta').textContent = 'recalculating…';
+    etaIdx = 2; // resume the lies from "4 minutes"
+    $('loadtitle').textContent = 'Transferring funds… again.';
+    playWave(crash, function () {
+      $('boost').hidden = false;
+      playWave(wave2, falseSummit);
+    });
+  }
+
+  // two seconds of pure hope
+  function falseSummit() {
+    for (var i = 0; i < loadTimers.length; i++) { clearTimeout(loadTimers[i]); clearInterval(loadTimers[i]); }
+    loadTimers = [];
+    progress = 100;
+    paintBar();
+    $('eta').textContent = 'done!';
+    $('loadtitle').textContent = 'Transfer complete!';
+    $('status').textContent = 'Redirecting you to your prize…';
+    loadTimers.push(setTimeout(reveal, 2200));
   }
 
   $('claim').addEventListener('click', function () {
     t0 = Date.now();
     show('load');
     document.title = 'Transferring funds…';
-    runStatus();
+    tickEta();
     loadTimers.push(setInterval(tickBar, 450));
+    loadTimers.push(setInterval(tickEta, 8000));
     loadTimers.push(setTimeout(function () { $('skip').classList.add('on'); }, 18000));
+    playWave(wave1, crashOut);
   });
 
   $('skip').addEventListener('click', reveal);
@@ -373,6 +488,7 @@
   function reveal() {
     for (var i = 0; i < loadTimers.length; i++) { clearTimeout(loadTimers[i]); clearInterval(loadTimers[i]); }
     store.set('playa_seen', '1');
+    $('booststat').textContent = boostTaps === 0 ? '0 (smart)' : String(boostTaps);
     document.title = 'no.';
     show('reveal');
   }

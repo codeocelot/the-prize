@@ -15,9 +15,25 @@ button. The fine print already gives the joke away, but nobody reads fine print
 falls back — forever. Status messages start plausible ("Verifying blockchain
 transaction…") and slowly turn on the reader ("You are AT Burning Man." …
 "The progress bar is embarrassed for you."). A timer labeled *time spent
-staring at this screen* counts up the whole time. After ~45 seconds of messages
-(or an early tap on the "just tell me what's going on" escape hatch) it
-transitions to—
+staring at this screen* counts up the whole time, next to an ETA that only ever
+gets worse ("about 10 seconds remaining" → "about 2 hours remaining" →
+"1 sunset remaining" → "stop checking").
+
+Then the cruelty escalates in stages:
+
+1. **The crash.** Just when the first message wave ends, the transfer dies:
+   "Connection lost. Playa dust detected in the blockchain. Restarting
+   transfer. Attempt 2 of 1…" — and the bar resets to 0%.
+2. **The boost button.** Round two offers "⚡ TAP TO BOOST TRANSFER SPEED."
+   Each tap *lowers* the bar by 2% and earns escalating mockery ("Tapping
+   harder does not help. It never has."). Taps are counted and reported back
+   in the reveal stats.
+3. **The false summit.** Round two ends with the bar snapping to 100% —
+   "Transfer complete! Redirecting you to your prize…" — two full seconds of
+   hope, and then—
+
+The whole ordeal runs ~90 seconds; a "just tell me what's going on" escape
+hatch appears after 18 seconds for the impatient. Either way it lands on—
 
 **Act III — The Reveal.** "There is no bitcoin." A stats card (Prizes won: 0.
 People nearby not looking at a phone: ~69,999.) and their *actual* prize:
