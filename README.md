@@ -29,33 +29,32 @@ Then the cruelty escalates in stages:
    seconds. It fails at 93% ("Grip signature: 'desperate.'"), fails again at
    97%, and passes on the third attempt: "Verified: human. Barely." Letting go
    early also counts — "You let go. A robot would never. Start over."
-3. **The fun-recognition CAPTCHA (Checkpoint 2 of 3).** A 3×3 emoji grid:
-   "Select all squares containing someone having more fun than you." The only
-   passing answer is all nine. ("Incorrect. They are ALL having more fun than
-   you. All of them." → "ALL. OF. THEM.")
-4. **The confession (Checkpoint 3 of 3).** Four checkboxes they must tick
+3. **The confession (Checkpoint 2 of 3).** Four checkboxes they must tick
    themselves: "I am on my phone, at Burning Man, on purpose" … "I have chosen
    this instead." The confirm button stays disabled until they've confessed.
-5. **The excuse (Checkpoint 4 of 3).** "For the record: why are you on your
+4. **The excuse (Checkpoint 3 of 3).** "For the record: why are you on your
    phone right now?" Every radio option earns a retort — "I thought it might
    be important" → *"It wasn't."* The chosen excuse goes on their permanent
    record in the reveal stats.
-6. **The begging (Checkpoint 5 of 3 · We Lied).** "Transfers of this size must
+5. **The begging (Checkpoint 4 of 3 · We Lied).** "Transfers of this size must
    be requested politely." They must type *please* to proceed. Wrong answers
    get coached ("P-L-E-A-S-E. Six letters. You can do this."); "pls" is
    rejected for laziness.
-7. **The oath (Final Checkpoint · Probably).** Say out loud: *"I'm sorry,
+6. **The oath (Final Checkpoint · Probably).** Say out loud: *"I'm sorry,
    sunset. I chose a URL over you."* A fake LISTENING… indicator pulses, then:
-   "We didn't hear you." → "Say it with your chest." → "Confession: we're a
-   static website. We can't hear anything. But you just apologized to the sky,
-   out loud, multiple times — and honestly? That's the most Burning Man thing
-   you've done all day."
-8. **The boost button.** The transfer resumes ("Attempt 2 of 1") and offers
+   "We didn't hear you." → "Say it with your chest." → "Okay, we can't
+   actually hear you. We're a website. But you did just apologize to the sky
+   twice, out loud."
+7. **The boost button.** The transfer resumes ("Attempt 2 of 1") and offers
    "⚡ TAP TO BOOST TRANSFER SPEED." Each tap *lowers* the bar by 2% and earns
    escalating mockery ("Tapping harder does not help. It never has.").
-9. **The false summit.** Round two ends with the bar snapping to 100% —
-   "Transfer complete! Redirecting you to your prize…" — two full seconds of
+8. **The false summit.** Round two ends with the bar snapping to 100% —
+   "Transfer complete! Redirecting you to your prize…" — a few full seconds of
    hope, and then—
+
+(A fun-recognition CAPTCHA — "select all squares containing someone having
+more fun than you," correct answer: all of them — is commented out in the
+code, benched until we have genuinely funny photos for the grid.)
 
 Every humiliation is tallied and read back in the reveal stats ("Humanity
 checks failed: 3 · Self-incriminating boxes checked: 4 of 4 · Times you typed

@@ -359,7 +359,7 @@
     <div class="prize" id="hook-prize">0.1 BTC</div>
     <p id="hook-sub">Yes. Really. Tap below to claim it.</p>
     <button class="btn" id="claim">CLAIM MY PRIZE</button>
-    <p class="fine">No purchase necessary. Prize non-transferable, non-refundable, non-existent-adjacent. By tapping you agree that your attention has already been collected as payment. Terms apply. Boy, do they apply.</p>
+    <p class="fine">No purchase necessary. Prize non-transferable and non-refundable. By tapping you agree that your attention has already been collected as payment. Terms apply. Boy, do they apply.</p>
   </section>
 
   <!-- ACT II: THE ENDLESS LOAD -->
@@ -379,14 +379,17 @@
   <section id="verify">
     <span class="badge">Security Checkpoint 1 of 3</span>
     <h1>Verify you're a human.</h1>
-    <p>The transfer can't resume until we're sure you're a real person. Hold the button until verification completes. Robots can't hold buttons. That's just science.</p>
+    <p>The transfer can't resume until we're sure you're a real person. Hold the button until verification completes. Robots can't hold buttons. Everyone knows this.</p>
     <button class="hold" id="holdbtn"><span class="holdfill" id="holdfill"></span><span class="holdlabel">HOLD TO VERIFY</span></button>
     <div class="status" id="holdmsg"></div>
     <button class="skip on skipx">or admit you might be a robot</button>
     <div class="timer">Time spent staring at this screen<br><b class="clock">0:00</b></div>
   </section>
 
-  <!-- CHECKPOINT 2: THE FUN-RECOGNITION CAPTCHA -->
+  <!-- CHECKPOINT 2: THE FUN-RECOGNITION CAPTCHA
+       Benched for now: the joke needs actual funny photos, emoji don't sell it.
+       Re-enable by uncommenting this section + the captcha JS block, and
+       rerouting the hold-success handler back to show('captcha').
   <section id="captcha">
     <span class="badge">Security Checkpoint 2 of 3</span>
     <h1>One more check.</h1>
@@ -407,16 +410,17 @@
     <button class="skip on skipx">I can't tell who's having fun anymore</button>
     <div class="timer">Time spent staring at this screen<br><b class="clock">0:00</b></div>
   </section>
+  -->
 
   <!-- CHECKPOINT 3: THE CONFESSION -->
   <section id="confess">
-    <span class="badge">Security Checkpoint 3 of 3</span>
+    <span class="badge">Security Checkpoint 2 of 3</span>
     <h1>Confirm a few things.</h1>
     <p>For compliance reasons, we need you to acknowledge the following. In writing. All of it.</p>
     <div class="checks" id="checks">
       <label><input type="checkbox"> I am currently at Burning Man</label>
       <label><input type="checkbox"> I am on my phone, at Burning Man, on purpose</label>
-      <label><input type="checkbox"> Something amazing is probably happening within 100 feet of me</label>
+      <label><input type="checkbox"> There is probably something better than this within 100 feet of me</label>
       <label><input type="checkbox"> I have chosen this instead</label>
     </div>
     <button class="btn" id="confessbtn" disabled>I CONFIRM ALL OF THE ABOVE</button>
@@ -427,7 +431,7 @@
 
   <!-- CHECKPOINT 4 (OF 3): THE EXCUSE -->
   <section id="excuse">
-    <span class="badge">Security Checkpoint 4 of 3</span>
+    <span class="badge">Security Checkpoint 3 of 3</span>
     <h1>State your excuse.</h1>
     <p>For the record: why are you on your phone right now?</p>
     <div class="checks" id="opts">
@@ -444,7 +448,7 @@
 
   <!-- CHECKPOINT 5: THE BEGGING -->
   <section id="beg">
-    <span class="badge">Security Checkpoint 5 of 3 · We Lied</span>
+    <span class="badge">Security Checkpoint 4 of 3 · We Lied</span>
     <h1>Say the magic word.</h1>
     <p>Transfers of this size must be requested politely. Type the magic word to release your funds.</p>
     <input class="begin" id="beginput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="the magic word">
@@ -479,7 +483,7 @@
       <div><span>Time spent staring at this screen</span><b id="clock2" class="clock">0:00</b></div>
       <div><span>Transfer restarts survived</span><b>1</b></div>
       <div><span>Humanity checks failed</span><b id="holdstat">0</b></div>
-      <div><span>Rounds needed to recognize fun</span><b id="capstat">0</b></div>
+      <!-- captcha benched: <div><span>Rounds needed to recognize fun</span><b id="capstat">0</b></div> -->
       <div><span>Self-incriminating boxes checked</span><b id="confessstat">0 of 4</b></div>
       <div><span>Excuse on record</span><b id="excusestat">none offered</b></div>
       <div><span>Times you typed "please" to a website</span><b id="begstat">0</b></div>
@@ -499,7 +503,7 @@
     <button class="btn" id="again">TRY AGAIN</button>
     <div class="toast" id="toast"></div>
 
-    <footer>This message was placed here by someone who loves you.<br>That's why they're bullying you.<br>Now go. The dust misses you.</footer>
+    <footer>This message was placed here by someone who loves you.<br>That's why they're bullying you.<br>Now go. Drink some water.</footer>
   </section>
 
 </main>
@@ -556,10 +560,10 @@
     ['Black Rock Desert?', 2.4],
     ['You\'re at Burning Man.', 2.6],
     ['You are AT Burning Man.', 2.6],
-    ['Surrounded by fire, art cars, and 70,000 of the most interesting weirdos on Earth…', 4.4],
-    ['…and you\'re watching a progress bar.', 3.4],
+    ['Right now, somewhere near you, an art car is on fire. On purpose.', 4.2],
+    ['And you found a progress bar to watch.', 3.4],
     ['The progress bar is embarrassed for you.', 3.2],
-    ['Buffering… your priorities…', 3.0],
+    ['This is taking a while, huh.', 3.0],
     ['Almost there. Probably. Hang tight.', 3.0]
   ];
 
@@ -580,9 +584,9 @@
     ['You are not on it.', 2.6],
     ['You are here. With me. A progress bar.', 3.4],
     ['I don\'t even want to be here.', 3.0],
-    ['Fun fact: there is no prize.', 3.0],
+    ['Oh — there\'s no prize, by the way.', 3.0],
     ['There was never a prize.', 2.8],
-    ['The real prize was the sunset you turned your back on to read this.', 4.2],
+    ['You turned your back on a sunset for this.', 4.2],
     ['You could have left at any time.', 3.0],
     ['You still can.', 2.4],
     ['…', 2.2],
@@ -600,7 +604,8 @@
       loadTimers.push(setTimeout(function () {
         el.textContent = wave[i][0];
         el.style.opacity = 1;
-        loadTimers.push(setTimeout(function () { i++; next(); }, wave[i][1] * 1000));
+        // 1.4x: every message lingers ~40% longer than feels right. That's the point.
+        loadTimers.push(setTimeout(function () { i++; next(); }, wave[i][1] * 1400));
       }, 300));
     }
     next();
@@ -614,7 +619,7 @@
   function tickBar() {
     // creep toward 99, then panic and fall back — forever
     if (progress >= 98.5) progress = 84 + Math.random() * 6;
-    else progress += (99 - progress) * (0.04 + Math.random() * 0.05);
+    else progress += (99 - progress) * (0.025 + Math.random() * 0.035);
     paintBar();
   }
 
@@ -642,7 +647,7 @@
     'That one made it slower, actually.',
     '−2%. Great work.',
     'The bar and I discussed it. No.',
-    'Every tap adds a grain of dust to your soul.',
+    'Please stop touching it.',
     'Okay, now you\'re just fidgeting.'
   ];
   var boostTaps = 0;
@@ -671,7 +676,7 @@
   }
 
   // ---- checkpoint 1: hold to verify ----
-  var HOLD_MS = 6000;
+  var HOLD_MS = 8000;
   var holdFailAt = [93, 97, Infinity]; // third attempt is allowed to succeed
   var holdAttempt = 0, holdFails = 0, holdTimer = null, holdT0 = 0, holdDone = false;
 
@@ -703,9 +708,9 @@
         holdDone = true;
         $('holdmsg').textContent = 'Verified: human. Barely. Proceeding…';
         setTimeout(function () {
-          document.title = 'Prove you can recognize fun';
-          show('captcha');
-        }, 1600);
+          document.title = 'Compliance check';
+          show('confess');
+        }, 2200);
       }
     }, 60);
   });
@@ -721,7 +726,8 @@
   $('holdbtn').addEventListener('pointerup', holdRelease);
   $('holdbtn').addEventListener('pointercancel', holdRelease);
 
-  // ---- checkpoint 2: the fun-recognition captcha ----
+  /* ---- checkpoint 2: the fun-recognition captcha ----
+     Benched with its HTML section — needs real photos to land.
   var tiles = document.querySelectorAll('#capgrid .tile');
   var capFails = 0, capDone = false;
   for (var t = 0; t < tiles.length; t++) {
@@ -749,6 +755,7 @@
           : 'ALL. OF. THEM.');
     }
   });
+  */
 
   // ---- checkpoint 3: the confession ----
   var checkEls = document.querySelectorAll('#checks input');
@@ -768,14 +775,14 @@
     setTimeout(function () {
       document.title = 'Explain yourself';
       show('excuse');
-    }, 1600);
+    }, 2400);
   });
 
   // ---- checkpoint 4 (of 3): the excuse ----
   var excuseRetorts = {
     important: ['It wasn’t.', 'I thought it might be important'],
     documenting: ['You’re documenting a loading bar.', 'documenting the experience'],
-    fomo: ['You’re missing out on everything, right now, to avoid missing out. Incredible.', 'FOMO'],
+    fomo: ['The stuff you’re afraid of missing? This is it. You’re missing it right now.', 'FOMO'],
     none: ['Honesty. Finally. It goes on your record anyway.', 'none (honest)']
   };
   var excuseChosen = null;
@@ -792,7 +799,7 @@
     setTimeout(function () {
       document.title = 'One more thing…';
       show('beg');
-    }, 1200);
+    }, 2000);
   });
 
   // ---- checkpoint 5: the begging ----
@@ -812,7 +819,7 @@
       setTimeout(function () {
         document.title = 'Say it out loud';
         show('oath');
-      }, 2000);
+      }, 2800);
     } else if (v === '') {
       $('begmsg').textContent = 'You have to actually type it.';
     } else if (v === 'pls' || v === 'plz') {
@@ -830,9 +837,9 @@
 
   // ---- final checkpoint: the oath ----
   var oathStages = [
-    { wait: 3500, msg: 'We didn’t hear you.', btnLabel: 'I SAID IT' },
-    { wait: 3000, msg: 'Say it with your chest.', btnLabel: 'I SAID IT LOUDER' },
-    { wait: 2500, msg: 'Okay. Confession: we’re a static website. We can’t hear anything. But you just apologized to the sky, out loud, multiple times. Proceed.', btnLabel: null }
+    { wait: 5000, msg: 'We didn’t hear you.', btnLabel: 'I SAID IT' },
+    { wait: 4200, msg: 'Say it with your chest.', btnLabel: 'I SAID IT LOUDER' },
+    { wait: 3500, msg: 'Okay, we can’t actually hear you. We’re a website. But you did just apologize to the sky twice, out loud. Go ahead.', btnLabel: null }
   ];
   var oathStage = 0, oathSaid = 0, oathTimer = null;
   $('oathbtn').addEventListener('click', function () {
@@ -852,7 +859,7 @@
         btn.hidden = false;
         oathStage++;
       } else {
-        setTimeout(resumeTransfer, 4600);
+        setTimeout(resumeTransfer, 6000);
       }
     }, st.wait);
   });
@@ -866,8 +873,8 @@
     paintBar();
     etaIdx = 2; // resume the lies from "4 minutes"
     tickEta();
-    loadTimers.push(setInterval(tickBar, 450));
-    loadTimers.push(setInterval(tickEta, 8000));
+    loadTimers.push(setInterval(tickBar, 600));
+    loadTimers.push(setInterval(tickEta, 11000));
     $('boost').hidden = false;
     playWave(wave2, falseSummit);
   }
@@ -880,7 +887,7 @@
     $('eta').textContent = 'done!';
     $('loadtitle').textContent = 'Transfer complete!';
     $('status').textContent = 'Redirecting you to your prize…';
-    loadTimers.push(setTimeout(reveal, 2200));
+    loadTimers.push(setTimeout(reveal, 3400));
   }
 
   $('claim').addEventListener('click', function () {
@@ -888,9 +895,9 @@
     show('load');
     document.title = 'Transferring funds…';
     tickEta();
-    loadTimers.push(setInterval(tickBar, 450));
-    loadTimers.push(setInterval(tickEta, 8000));
-    loadTimers.push(setTimeout(function () { $('skip').classList.add('on'); }, 18000));
+    loadTimers.push(setInterval(tickBar, 600));
+    loadTimers.push(setInterval(tickEta, 11000));
+    loadTimers.push(setTimeout(function () { $('skip').classList.add('on'); }, 22000));
     playWave(wave1, crashOut);
   });
 
@@ -903,7 +910,7 @@
     endHold();
     store.set('playa_seen', '1');
     $('holdstat').textContent = String(holdFails);
-    $('capstat').textContent = capDone ? String(capFails + 1) : String(capFails);
+    // captcha benched: $('capstat').textContent = capDone ? String(capFails + 1) : String(capFails);
     $('confessstat').textContent = checkedCount() + ' of 4';
     $('excusestat').textContent = excuseChosen ? '“' + excuseRetorts[excuseChosen][1] + '”' : 'none offered';
     $('begstat').textContent = begged ? '1' : '0';
@@ -924,7 +931,7 @@
     'Still no.',
     'The button works fine. The button is not the problem.',
     'You\'re at BURNING MAN.',
-    'Every tap makes the sunset slightly less impressed with you.',
+    'What did you think was going to happen?',
     'Put. It. Away.',
     'Okay, this is just sad now. Go find your camp.'
   ];
