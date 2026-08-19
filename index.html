@@ -677,8 +677,10 @@
 
   // ---- checkpoint 1: hold to verify ----
   var HOLD_MS = 8000;
-  var holdFailAt = [93, 97, Infinity]; // third attempt is allowed to succeed
+  // Two rounds: round one fails outright at 93%. Round two reaches 99%,
+  // sags back to 80% while they hang on, then crawls to 100% and passes.
   var holdAttempt = 0, holdFails = 0, holdTimer = null, holdT0 = 0, holdDone = false;
+  var holdPhase = 'up', holdDisp = 0;
 
   function endHold() {
     clearInterval(holdTimer);
@@ -692,34 +694,47 @@
     e.preventDefault();
     if (this.setPointerCapture) this.setPointerCapture(e.pointerId);
     holdT0 = Date.now();
+    holdPhase = 'up';
+    holdDisp = 0;
     $('holdmsg').textContent = 'Verifying humanity…';
     holdTimer = setInterval(function () {
-      var pct = (Date.now() - holdT0) / HOLD_MS * 100;
-      $('holdfill').style.width = Math.min(pct, 100) + '%';
-      if (pct >= holdFailAt[Math.min(holdAttempt, 2)]) {
-        endHold();
-        holdFails++;
-        $('holdmsg').textContent = holdAttempt === 0
-          ? 'Verification failed at 93%. Grip signature: “desperate.” Try again.'
-          : 'Failed at 97%. So close. So, so close. Again.';
-        holdAttempt++;
-      } else if (pct >= 100) {
-        endHold();
-        holdDone = true;
-        $('holdmsg').textContent = 'Verified: human. Barely. Proceeding…';
-        setTimeout(function () {
-          document.title = 'Compliance check';
-          show('confess');
-        }, 2200);
+      if (holdPhase === 'up') {
+        holdDisp = (Date.now() - holdT0) / HOLD_MS * 100;
+        if (holdAttempt === 0 && holdDisp >= 93) {
+          endHold();
+          holdFails++;
+          holdAttempt = 1;
+          $('holdmsg').textContent = 'Verification failed at 93%. Grip signature: “desperate.” Try again.';
+          return;
+        }
+        if (holdDisp >= 99) {
+          holdPhase = 'down';
+          $('holdmsg').textContent = 'Hold still.';
+        }
+      } else if (holdPhase === 'down') {
+        holdDisp -= 1.1;
+        if (holdDisp <= 80) holdPhase = 'crawl';
+      } else { // crawl
+        holdDisp += 0.55;
+        if (holdDisp >= 100) {
+          endHold();
+          holdDone = true;
+          $('holdmsg').textContent = 'Verified: human. Barely. Proceeding…';
+          setTimeout(function () {
+            document.title = 'Compliance check';
+            show('confess');
+          }, 2200);
+          return;
+        }
       }
+      $('holdfill').style.width = Math.min(holdDisp, 100) + '%';
     }, 60);
   });
   function holdRelease() {
     if (holdDone || holdTimer === null) return;
-    var pct = (Date.now() - holdT0) / HOLD_MS * 100;
     endHold();
     holdFails++;
-    $('holdmsg').textContent = pct < 8
+    $('holdmsg').textContent = holdDisp < 8
       ? 'That was a tap. HOLD. Like you hold your phone. Constantly.'
       : 'You let go. A robot would never. Start over.';
   }

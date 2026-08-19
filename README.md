@@ -25,10 +25,12 @@ Then the cruelty escalates in stages:
    "Connection lost. Playa dust detected in the blockchain. Transfer suspended
    pending a security review. (The security risk is you.)" — and the victim is
    marched through three security checkpoints:
-2. **Hold to verify you're a human (Checkpoint 1 of 3).** Hold a button for six
-   seconds. It fails at 93% ("Grip signature: 'desperate.'"), fails again at
-   97%, and passes on the third attempt: "Verified: human. Barely." Letting go
-   early also counts — "You let go. A robot would never. Start over."
+2. **Hold to verify you're a human (Checkpoint 1 of 3).** Hold a button for
+   eight seconds. Round one fails at 93% ("Grip signature: 'desperate.'").
+   Round two climbs to 99%, then visibly bleeds back down to 80% ("Hold
+   still.") while they cling on, before crawling to 100%: "Verified: human.
+   Barely." Letting go early at any point restarts the round — "You let go.
+   A robot would never. Start over."
 3. **The confession (Checkpoint 2 of 3).** Four checkboxes they must tick
    themselves: "I am on my phone, at Burning Man, on purpose" … "I have chosen
    this instead." The confirm button stays disabled until they've confessed.
