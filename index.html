@@ -27,8 +27,6 @@
     line-height: 1.5;
     overflow-x: hidden;
     display: flex;
-    align-items: center;
-    justify-content: center;
     padding: 24px;
     min-height: 100dvh;
   }
@@ -54,7 +52,9 @@
     background: inherit;
   }
 
-  main { width: 100%; max-width: 26rem; position: relative; }
+  /* auto margins center like flex centering would, but still allow scrolling
+     when a section (the reveal) is taller than the viewport */
+  main { width: 100%; max-width: 26rem; position: relative; margin: auto; }
 
   section { display: none; text-align: center; animation: fadein .6s ease; }
   section.on { display: block; }
