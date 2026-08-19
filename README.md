@@ -99,3 +99,13 @@ Any static host works — GitHub Pages, Cloudflare Pages, Netlify. Then:
 ```sh
 open index.html
 ```
+
+## QA mode
+
+Append `?debug=true` (e.g. `https://burningman.wtf/?debug=true`) to get:
+
+- everything fast: status messages ~10x, hold-to-verify 1.5s rounds,
+  every scripted wait capped at 500ms
+- a jump bar pinned to the bottom of the screen to teleport to any act
+  (hook / load / verify / confess / excuse / beg / oath / resume / reveal)
+- a `reset` button that clears the repeat-visitor localStorage and reloads

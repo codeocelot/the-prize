@@ -345,6 +345,30 @@
     color: #7d7060;
     line-height: 1.7;
   }
+
+  /* ?debug=true jump bar */
+  .dbg {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+    background: #000000cc;
+    z-index: 99;
+  }
+  .dbg button {
+    font: 700 10px ui-monospace, "SF Mono", Menlo, monospace;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--amber);
+    background: none;
+    border: 1px solid #ffb34755;
+    border-radius: 6px;
+    padding: 5px 8px;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
@@ -512,6 +536,10 @@
 (function () {
   var $ = function (id) { return document.getElementById(id); };
 
+  // ?debug=true — QA mode: everything runs fast, jump bar at the bottom
+  var DEBUG = /[?&]debug=true/.test(location.search);
+  function T(n) { return DEBUG ? Math.min(n, 500) : n; }
+
   // ---- repeat-offender detection ----
   var store = {
     get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
@@ -605,7 +633,7 @@
         el.textContent = wave[i][0];
         el.style.opacity = 1;
         // 1.4x: every message lingers ~40% longer than feels right. That's the point.
-        loadTimers.push(setTimeout(function () { i++; next(); }, wave[i][1] * 1400));
+        loadTimers.push(setTimeout(function () { i++; next(); }, wave[i][1] * (DEBUG ? 150 : 1400)));
       }, 300));
     }
     next();
@@ -676,7 +704,7 @@
   }
 
   // ---- checkpoint 1: hold to verify ----
-  var HOLD_MS = 8000;
+  var HOLD_MS = DEBUG ? 1500 : 8000;
   // Two rounds: round one fails outright at 93%. Round two reaches 99%,
   // sags back to 80% while they hang on, then crawls to 100% and passes.
   var holdAttempt = 0, holdFails = 0, holdTimer = null, holdT0 = 0, holdDone = false;
@@ -712,10 +740,10 @@
           $('holdmsg').textContent = 'Hold still.';
         }
       } else if (holdPhase === 'down') {
-        holdDisp -= 1.1;
+        holdDisp -= DEBUG ? 4.4 : 1.1;
         if (holdDisp <= 80) holdPhase = 'crawl';
       } else { // crawl
-        holdDisp += 0.55;
+        holdDisp += DEBUG ? 2.2 : 0.55;
         if (holdDisp >= 100) {
           endHold();
           holdDone = true;
@@ -723,7 +751,7 @@
           setTimeout(function () {
             document.title = 'Compliance check';
             show('confess');
-          }, 2200);
+          }, T(2200));
           return;
         }
       }
@@ -790,7 +818,7 @@
     setTimeout(function () {
       document.title = 'Explain yourself';
       show('excuse');
-    }, 2400);
+    }, T(2400));
   });
 
   // ---- checkpoint 4 (of 3): the excuse ----
@@ -814,7 +842,7 @@
     setTimeout(function () {
       document.title = 'One more thing…';
       show('beg');
-    }, 2000);
+    }, T(2000));
   });
 
   // ---- checkpoint 5: the begging ----
@@ -834,7 +862,7 @@
       setTimeout(function () {
         document.title = 'Say it out loud';
         show('oath');
-      }, 2800);
+      }, T(2800));
     } else if (v === '') {
       $('begmsg').textContent = 'You have to actually type it.';
     } else if (v === 'pls' || v === 'plz') {
@@ -874,9 +902,9 @@
         btn.hidden = false;
         oathStage++;
       } else {
-        setTimeout(resumeTransfer, 6000);
+        setTimeout(resumeTransfer, T(6000));
       }
-    }, st.wait);
+    }, T(st.wait));
   });
 
   // ---- back to the bar ----
@@ -889,7 +917,7 @@
     etaIdx = 2; // resume the lies from "4 minutes"
     tickEta();
     loadTimers.push(setInterval(tickBar, 600));
-    loadTimers.push(setInterval(tickEta, 11000));
+    loadTimers.push(setInterval(tickEta, T(11000)));
     $('boost').hidden = false;
     playWave(wave2, falseSummit);
   }
@@ -902,7 +930,7 @@
     $('eta').textContent = 'done!';
     $('loadtitle').textContent = 'Transfer complete!';
     $('status').textContent = 'Redirecting you to your prize…';
-    loadTimers.push(setTimeout(reveal, 3400));
+    loadTimers.push(setTimeout(reveal, T(3400)));
   }
 
   $('claim').addEventListener('click', function () {
@@ -911,8 +939,8 @@
     document.title = 'Transferring funds…';
     tickEta();
     loadTimers.push(setInterval(tickBar, 600));
-    loadTimers.push(setInterval(tickEta, 11000));
-    loadTimers.push(setTimeout(function () { $('skip').classList.add('on'); }, 22000));
+    loadTimers.push(setInterval(tickEta, T(11000)));
+    loadTimers.push(setTimeout(function () { $('skip').classList.add('on'); }, T(22000)));
     playWave(wave1, crashOut);
   });
 
@@ -956,6 +984,37 @@
     retortIdx++;
     if (retortIdx >= retorts.length) $('again').textContent = 'THE BUTTON HAS GIVEN UP ON YOU';
   });
+
+  // ---- ?debug=true jump bar ----
+  if (DEBUG) {
+    var jumps = {
+      hook: function () { stopLoad(); show('hook'); },
+      load: function () { stopLoad(); $('claim').click(); },
+      verify: function () { stopLoad(); show('verify'); },
+      confess: function () { stopLoad(); show('confess'); },
+      excuse: function () { stopLoad(); show('excuse'); },
+      beg: function () { stopLoad(); show('beg'); },
+      oath: function () { stopLoad(); show('oath'); },
+      resume: function () { stopLoad(); resumeTransfer(); },
+      reveal: function () { reveal(); },
+      reset: function () {
+        try { localStorage.removeItem('playa_visits'); localStorage.removeItem('playa_seen'); } catch (e) {}
+        location.reload();
+      }
+    };
+    var bar = document.createElement('div');
+    bar.className = 'dbg';
+    Object.keys(jumps).forEach(function (k) {
+      var b = document.createElement('button');
+      b.textContent = k;
+      b.addEventListener('click', function () {
+        if (t0 === null) t0 = Date.now();
+        jumps[k]();
+      });
+      bar.appendChild(b);
+    });
+    document.body.appendChild(bar);
+  }
 })();
 </script>
 </body>
