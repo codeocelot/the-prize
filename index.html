@@ -440,7 +440,7 @@
   <section id="confess">
     <span class="badge">Security Checkpoint 2 of 3</span>
     <h1>Confirm a few things.</h1>
-    <p>For compliance reasons, we need you to acknowledge the following. In writing. All of it.</p>
+    <p>For compliance reasons, we need you to acknowledge the following.</p>
     <div class="checks" id="checks">
       <label><input type="checkbox"> I am currently at Burning Man</label>
       <label><input type="checkbox"> I am on my phone, at Burning Man, on purpose</label>
@@ -732,7 +732,7 @@
           endHold();
           holdFails++;
           holdAttempt = 1;
-          $('holdmsg').textContent = 'Verification failed at 93%. Grip signature: “desperate.” Try again.';
+          $('holdmsg').textContent = 'Fuck! Verification failed at 93%. Try again.';
           return;
         }
         if (holdDisp >= 99) {
@@ -747,7 +747,7 @@
         if (holdDisp >= 100) {
           endHold();
           holdDone = true;
-          $('holdmsg').textContent = 'Verified: human. Barely. Proceeding…';
+          $('holdmsg').textContent = 'Verified. Proceeding…';
           setTimeout(function () {
             document.title = 'Compliance check';
             show('confess');
@@ -814,7 +814,7 @@
   }
   $('confessbtn').addEventListener('click', function () {
     this.disabled = true;
-    $('confessmsg').textContent = 'Noted. Forever.';
+    $('confessmsg').textContent = 'Noted.';
     setTimeout(function () {
       document.title = 'Explain yourself';
       show('excuse');
@@ -826,7 +826,7 @@
     important: ['It wasn’t.', 'I thought it might be important'],
     documenting: ['You’re documenting a loading bar.', 'documenting the experience'],
     fomo: ['The stuff you’re afraid of missing? This is it. You’re missing it right now.', 'FOMO'],
-    none: ['Honesty. Finally. It goes on your record anyway.', 'none (honest)']
+    none: ['Good enough.', 'none (honest)']
   };
   var excuseChosen = null;
   var radios = document.querySelectorAll('#opts input');
@@ -858,7 +858,7 @@
     var v = $('beginput').value.trim().toLowerCase().replace(/[.!]+$/, '');
     if (v === 'please') {
       begged = true;
-      $('begmsg').textContent = 'Begging received. Dignity: processed. One more thing…';
+      $('begmsg').textContent = 'One more thing…';
       setTimeout(function () {
         document.title = 'Say it out loud';
         show('oath');
